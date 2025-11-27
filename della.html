@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Absensi QRCode PRAMUKA</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0; padding: 0;
+      background: #6cdde0;
+      color: #222;
+    }header {
+  background: linear-gradient(90deg, #7cc4ee, #72a4b1);
+  color: white;
+  text-align: center;
+  padding: 40px 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+.filter-btns {
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  margin-bottom: 20px;
+}
+.filter-btn {
+  background: #c70000; color: #fff; border: none; padding: 8px 14px;
+  border-radius: 8px; font-weight: 600; cursor: pointer;
+}
+
+#searchInput {
+  display: block; width: 100%; padding: 12px 14px; border-radius: 8px;
+  border: 1px solid #ccc; font-size: 15px; margin-bottom: 20px;
+}
+
+ul.daftar-anggota {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px; list-style: none; padding: 0; margin: 0;
+}
+ul.daftar-anggota li {
+  background: #fff; border: 2px solid #72cbce; border-radius: 10px;
+  text-align: center; padding: 16px 10px; font-weight: 600;
+}
+
+.biodata {
+  display: none; background: #fff; border-radius: 12px; padding: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1); margin-top: 20px;
+}
+.biodata img { border-radius: 10px; max-width: 140px; }
+
+.back-btn {
+  background: #59afbe; color: white; padding: 10px 18px; border: none;
+  border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 15px;
+}
+
+footer {
+  text-align: center; font-size: 13px; color: #64cace; margin-top: 30px;
+  padding: 12px 0; border-top: 1px solid #ddd;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Absensi QRCode PRAMUKA</h1>
+    <p>SMKN 1 KANDANGHAUR — Ekstrakurikuler Pramuka</p>
+  </header>  
+<div class="container">
+    <div id="pageAnggota">
+      <div class="filter-btns">
+        <button class="filter-btn" onclick="setKelompok('XI TKPI', this)">XI TKPI</button>
+        <button class="filter-btn" onclick="setKelompok('XI TJKT 1', this)">XI TJKT 1</button>
+        <button class="filter-btn" onclick="setKelompok('XI TJKT 2', this)">XI TJKT 2</button>
+        <button class="filter-btn" onclick="setKelompok('XI TJKT 3', this)">XI TJKT 3</button>
+        <button class="filter-btn" onclick="setKelompok('XI TO 1', this)">XI TO 1</button>
+        <button class="filter-btn" onclick="setKelompok('XI TO 2', this)">XI TO 2</button>
+        <button class="filter-btn" onclick="setKelompok('XI BCP 2', this)">XI BCP 2</button>
+        <button class="filter-btn" onclick="setKelompok('XI TKIN', this)">XI TKIN</button>
+        <button class="filter-btn" onclick="showRekap()">📊 Laporan Absen</button>
+      </div>
+
+      <input type="text" id="searchInput" placeholder="Cari nama anggota..." onkeyup="cariAnggota()">
+      <ul class="daftar-anggota" id="daftarAnggota"></ul>
+
+      <div class="biodata" id="biodataBox">
+        <div style="text-align:center;">
+          <h2 id="namaB"></h2>
+          <p><b>ID:</b> <span id="idB">-</span></p>
+          <p><b>Kelas:</b> <span id="kelasB">-</span></p>
+          <div>
+            <h3>QR Code Absensi</h3>
+            <img id="qr" src="" alt="QR Code">
+          </div>
+          <button class="back-btn" onclick="kembali()">← Kembali</button>
+        </div>
+      </div>
+    </div>
+
+<div id="pageRekap" style="display:none; text-align:center; margin-top:20px;">
+  <h2>📊 Laporan Absensi Pramuka</h2>
+  <table border="1" cellpadding="6" cellspacing="0" style="margin:0 auto; border-collapse:collapse;">
+    <thead style="background:#4aa2a5; color:white;">
+      <tr><th>Waktu</th><th>Nama</th><th>ID</th><th>Status</th></tr>
+    </thead>
+    <tbody id="rekapBody">
+      <tr><td colspan="4">Data akan muncul otomatis...</td></tr>
+    </tbody>
+  </table>
+  <button class="back-btn" onclick="backToAnggota()" style="margin-top:20px;">← Kembali</button>
+</div>
+</div>
+  </div>  <footer>
+    &copy; 2025 By Della oktavia | Ekstrakurikuler Pramuka
+  </footer>  
+
+  <script>
+    const anggotaPaskibra = [
+      // XI TKPI
+      { nama: "AGUS ANIS", id: "TKPI001", kelompok: "XI TKPI", qr: "agus.jpg"},
+      { nama: "RAMADHANI NURSAIDI", id: "TKPI002", kelompok: "XI TKPI", qr: "ramadhani.jpg" },
+      
+      // XI TJKT 1
+      { nama: "ANGGI JUBAEDAH", id: "TJKT1003", kelompok: "XI TJKT 1", qr: "anggi.jpg" },
+    { nama: "DELLA OKTAVIA", id: "TJKT1004", kelompok: "XI TJKT 1", qr: "della.jpg" }, 
+    { nama: "EMAH RAHMAWATI", id: "TJKT1005", kelompok: "XI TJKT 1", qr: "emah.jpg" },
+     
+
+      // XI TJKT 2
+    { nama: "IMAH", id: "TJKT2006", kelompok: "XI TJKT 2", qr: "imah.jpg" },
+      { nama: "RESNA ALIN", id: "TJKT2007", kelompok: "XI TJKT 2", qr: "alin.jpg" },
+
+      // XI TJKT 3
+    { nama: "RANGGA JAYA", id: "TJKT3008", kelompok: "XI TJKT 3", qr: "rangga j.jpg" },
+    { nama: "TANIA AYU ASTUTI", id: "TJKT3009", kelompok: "XI TJKT 3", qr: "tania.jpg" },
+      
+      // XI TO 1
+      { nama: "KIRANI TUNGGA DEWI", id: "TO10010", kelompok: "XI TO 1", qr: "kirani.jpg"},
+{ nama: "RANGGA SEPTIANO", id: "TO10011", kelompok: "XI TO 1", qr: "rangga s.jpg" },
+
+      // XI TO 2
+  { nama: "MOHAMMAD FAREL", id: "TO20012", kelompok: "XI TO 2", qr: "farel.jpg" },
+ 
+      // XI BCP 2
+      { nama: "FIFIT FITRYANI FAIZAL", id: "BCP20013", kelompok: "XI BCP 2", qr: "fifit.jpg" },
+
+      // XI TKIN
+ { nama: "CARUDIN", id: "TKIN0014", kelompok: "XI TKIN", qr: "carudin.jpg" },
+ { nama: "CELSI OLIVIA", id: "TKIN0015", kelompok: "XI TKIN", qr: "celsi.jpg"},
+ { nama: "FATLIKA", id: "TKIN0016", kelompok: "XI TKIN", qr: "fatlika.jpg" },
+      
+    ];
+
+
+    let currentKelompok = 'XI TKPI';
+
+    const daftar = document.getElementById('daftarAnggota');
+    const biodataBox = document.getElementById('biodataBox');
+
+    function setKelompok(k, el) {
+      currentKelompok = k;
+      renderList();
+    }
+
+    function renderList() {
+      daftar.innerHTML = '';
+      const filter = document.getElementById('searchInput').value.toLowerCase();
+      let found = false;
+      anggotaPaskibra.forEach(a => {
+        if (a.kelompok === currentKelompok && a.nama.toLowerCase().includes(filter)) {
+          found = true;
+          const li = document.createElement('li');
+          li.textContent = a.nama;
+          li.onclick = () => tampilBiodata(a);
+          daftar.appendChild(li);
+        }
+      });
+      if (!found) daftar.innerHTML = '<li>Tidak ditemukan</li>';
+    }
+
+    function tampilBiodata(a) 
+    {
+      document.getElementById('searchInput').style.display = 'none';
+      daftar.style.display = 'none';
+      biodataBox.style.display = 'block';
+      document.getElementById('namaB').textContent = a.nama;
+      document.getElementById('idB').textContent = a.id;
+      document.getElementById('kelasB').textContent = a.kelompok;
+      document.getElementById('qr').src = a.qr;
+    }
+
+    function kembali() {
+      biodataBox.style.display = 'none';
+      daftar.style.display = 'grid';
+      document.getElementById('searchInput').style.display = 'block';
+    }
+
+    function cariAnggota() { renderList(); }
+
+    function showRekap() {
+      document.getElementById('pageAnggota').style.display = 'none';
+      document.getElementById('pageRekap').style.display = 'block';
+    }
+
+    function backToAnggota() {
+      document.getElementById('pageRekap').style.display = 'none';
+      document.getElementById('pageAnggota').style.display = 'block';
+    }
+
+    window.onload = renderList;
+// === LOAD LAPORAN dari Google Sheet via OpenSheetELK ===
+async function loadRekap() {
+  const url = "https://opensheet.elk.sh/1qRyWl6B0e7Jy4fyW3x42Q8I2JgfkeCAEfLI16cRlEaY/Absensi"; 
+  const tbody = document.getElementById("rekapBody");
+
+  tbody.innerHTML = `<tr><td colspan="4">Memuat data...</td></tr>`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="4">Tidak ada data</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = ""; // reset tabel
+
+    data.forEach(row => {
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+  <td>${row.Timestamp || "-"}</td>
+  <td>${row.Nama || "-"}</td>
+  <td>${row.ID || "-"}</td>
+  <td>${row.Status || "-"}</td>
+`;
+
+      tbody.appendChild(tr);
+    });
+
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="4">Gagal memuat data!</td></tr>`;
+    console.error(e);
+  }
+}
+
+// panggil saat buka menu laporan
+function showRekap() {
+  document.getElementById("pageAnggota").style.display = "none";
+  document.getElementById("pageRekap").style.display = "block";
+  loadRekap(); // <-- load otomatis
+}
+  </script>
+</body>
+</html>
