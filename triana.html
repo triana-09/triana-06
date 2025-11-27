@@ -9,13 +9,13 @@
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0; padding: 0;
-      background: #f5f2f2; color: #7c7373;
+      background: #f5f4f2; color: #7c7873;
     }
     header {
-      background: linear-gradient(90deg, #550202, #aaa7a4);
+      background: linear-gradient(90deg, #550202,  #550202);
       color: white; text-align: center;
       padding: 40px 20px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 6px #9e9b9b;
     }
     .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
     .filter-btns {
@@ -23,12 +23,12 @@
       margin-bottom: 20px;
     }
     .filter-btn {
-      background: #550202; color: #fff; border: none; padding: 8px 14px;
+      background: #550202; color: #ffffff; border: none; padding: 8px 14px;
       border-radius: 8px; font-weight: 600; cursor: pointer;
     }
     #searchInput {
       display: block; width: 100%; padding: 12px 14px; border-radius: 8px;
-      border: 1px solid #ffffff; font-size: 15px; margin-bottom: 20px;
+      border: 1px solid #550202; font-size: 15px; margin-bottom: 20px;
     }
     ul.daftar-anggota {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -40,7 +40,7 @@
     }
     .biodata {
       display: none; background: #fff; border-radius: 12px; padding: 20px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1); margin-top: 20px;
+      box-shadow: 0 3px 10px #550202; margin-top: 20px;
     }
     .biodata img { border-radius: 10px; max-width: 140px; }
     .back-btn {
@@ -48,8 +48,8 @@
       border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 15px;
     }
     footer {
-      text-align: center; font-size: 13px; color: #fffdfd; margin-top: 30px;
-      padding: 12px 0; border-top: 1px solid #ddd;
+      text-align: center; font-size: 13px; color:   #550202; margin-top: 30px;
+      padding: 12px 0; border-top: 1px solid #550202;
     }
   </style>
 </head>
@@ -97,7 +97,7 @@
     <div id="pageRekap" style="display:none; text-align:center; margin-top:20px;">
       <h2>📊 Laporan Absensi Paskibra</h2>
       <table border="1" cellpadding="6" cellspacing="0" style="margin:0 auto; border-collapse:collapse;">
-        <thead style="background:#c70000; color:white;">
+        <thead style="background: #550202; color:white;">
           <tr><th>Waktu</th><th>Nama</th><th>ID</th><th>Status</th></tr>
         </thead>
         <tbody id="rekapBody">
